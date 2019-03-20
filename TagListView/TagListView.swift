@@ -198,7 +198,7 @@ open class TagListView: UIView {
     }
     
     @IBOutlet open weak var delegate: TagListViewDelegate?
-    
+    public var expectedWidth = UIScreen.main.bounds.size.width
     open private(set) var tagViews: [TagView] = []
     private(set) var tagBackgroundViews: [UIView] = []
     private(set) var rowViews: [UIView] = []
@@ -239,7 +239,7 @@ open class TagListView: UIView {
             tagView.frame.size = tagView.intrinsicContentSize
             tagViewHeight = tagView.frame.height
             
-            if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frame.width {
+            if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > expectedWidth {
                 currentRow += 1
                 currentRowWidth = 0
                 currentRowTagCount = 0
@@ -249,7 +249,7 @@ open class TagListView: UIView {
                 rowViews.append(currentRowView)
                 addSubview(currentRowView)
 
-                tagView.frame.size.width = min(tagView.frame.size.width, frame.width)
+                tagView.frame.size.width = min(tagView.frame.size.width, expectedWidth)
             }
             
             let tagBackgroundView = tagBackgroundViews[index]
@@ -270,9 +270,9 @@ open class TagListView: UIView {
             case .left:
                 currentRowView.frame.origin.x = 0
             case .center:
-                currentRowView.frame.origin.x = (frame.width - (currentRowWidth - marginX)) / 2
+                currentRowView.frame.origin.x = (expectedWidth - (currentRowWidth - marginX)) / 2
             case .right:
-                currentRowView.frame.origin.x = frame.width - (currentRowWidth - marginX)
+                currentRowView.frame.origin.x = expectedWidth - (currentRowWidth - marginX)
             }
             currentRowView.frame.size.width = currentRowWidth
             currentRowView.frame.size.height = max(tagViewHeight, currentRowView.frame.height)
@@ -289,7 +289,7 @@ open class TagListView: UIView {
         if rows > 0 {
             height -= marginY
         }
-        return CGSize(width: frame.width, height: height)
+        return CGSize(width: expectedWidth, height: height)
     }
     
     private func createNewTagView(_ title: String) -> TagView {
